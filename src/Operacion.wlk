@@ -1,26 +1,16 @@
-class Operacion {
-	var valorInmueble
-	
-	method valorInmueble(){
-		return valorInmueble
-	}
-	
-	method calcularComision()
-}
-
-class Alquiler inherits Operacion {
+object alquiler {
 	var property cantidadDeMeses
 	
-	override method calcularComision(){
-		return (cantidadDeMeses * valorInmueble) / 50000
+	method calcularComision(precioInmueble){
+		return (cantidadDeMeses * precioInmueble) / 50000
 	}
 }
 
 
-class Venta inherits Operacion {
+object venta {
 	var property porcentajeComision // hacer property o solo set?
 	
-	override method calcularComision(){
-		return (porcentajeComision / 100) * valorInmueble
+	method calcularComision(precioInmueble){
+		return (porcentajeComision / 100) * precioInmueble
 	}
 }
