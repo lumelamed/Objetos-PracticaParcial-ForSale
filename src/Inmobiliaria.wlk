@@ -16,12 +16,12 @@ object criterioMasComisionesAcumuladas {
 
 object criterioMasOperacionesCerradas {
 	method mejorEmpleado(empleados){
-		empleados.max({empleado => empleado.cantidadOperacionesCerradas()})
+		empleados.max({empleado => empleado.inmueblesVendidos().size()})
 	}
 }
 
 object criterioMasCantidadDeReservas {
 	method mejorEmpleado(empleados){
-		empleados.max({empleado => empleado.cantidadReservas()})
+		empleados.max({empleado => empleado.inmueblesReservados().size()})
 	}
 }

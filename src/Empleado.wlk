@@ -4,19 +4,11 @@ import Inmueble.*
 
 class Empleado {
 	var comisionesAcumuladas = 0
-	var cantidadOperacionesCerradas = 0
-	var cantidadReservas = 0
+	var property inmueblesReservados = #{}
+	var property inmueblesVendidos = #{}
 	
 	method comisionesAcumuladas(){
 		return comisionesAcumuladas
-	}
-	
-	method cantidadOperacionesCerradas(){
-		return cantidadOperacionesCerradas
-	}
-	
-	method cantidadReservas(){
-		return cantidadReservas
 	}
 	
 	method calcularComisionDe(unInmueble){
@@ -27,8 +19,8 @@ class Empleado {
 		const sePuedeReservar = unInmueble.validarSiSePuedeReservarOperacion(unCliente)
 		
 		if(sePuedeReservar){
-			cantidadReservas ++
 			unInmueble.reservar(unCliente)
+			self.agregarAInmueblesReservados(unInmueble)
 		}
 	}
 	
@@ -37,8 +29,31 @@ class Empleado {
 		
 		if(sePuedeConcretar){
 			comisionesAcumuladas += self.calcularComisionDe(unInmueble)
-			cantidadOperacionesCerradas ++
 			unInmueble.concretar(unCliente)
+			self.quitarDeInmueblesReservados(unInmueble)
+			self.agregarAInmueblesVendidos(unInmueble)
 		}
+	}
+	
+	method agregarAInmueblesReservados(unInmueble){
+		inmueblesReservados.add(unInmueble)
+	}
+	
+	method agregarAInmueblesVendidos(unInmueble){
+		inmueblesVendidos.add(unInmueble)
+	}
+	
+	method quitarDeInmueblesReservados(unInmueble) {
+		inmueblesReservados.remove(unInmueble)
+	}
+	
+	method vaATenerProblemasCon(otroEmpleado){
+		const zonasDondeVendi = self.inmueblesVendidos().map({inmueble => inmueble.zona()})
+		const zonasDondeVendioOtro = otroEmpleado.inmueblesVendidos().map({inmueble => inmueble.zona()})
+		
+		const algunoConcretoDondeOtroReservo = inmueblesReservados.any({inmueble => otroEmpleado.inmueblesVendidos().contains(inmueble)}) ||
+											   inmueblesVendidos.any({inmueble => otroEmpleado.inmueblesReservados().contains(inmueble)})
+		
+		return zonasDondeVendi.any({zona => zonasDondeVendioOtro.contains(zona)}) && algunoConcretoDondeOtroReservo
 	}
 }

@@ -3,17 +3,17 @@ import Operacion.*
 class Inmueble {
 	const property tamanio // metros cuadrados
 	const property cantidadAmbientes
-	const property operacion
+	const operacion
 	const zona
 	var valorInmueble
 	var estado = "disponible" // reservada, concretada, disponible
 	var cliente
 	
-	method valorInmueble(){
-		return valorInmueble
+	method operacion(){
+		return operacion
 	}
 	
-	method calcularValor()
+	method valorInmueble()
 	
 	method estado(){
 		return estado
@@ -43,23 +43,46 @@ class Inmueble {
 }
 
 class Casa inherits Inmueble {
-	override method calcularValor(){
+	override method valorInmueble(){
 		return valorInmueble + zona.plusPorZona()
 	}
 }
 
 class PH inherits Inmueble {
-	override method calcularValor(){
+	override method valorInmueble(){
 		return (14000 * tamanio).min(500000) + zona.plusPorZona()
 	}
 }
 
 class Departamento inherits Inmueble {
-	override method calcularValor(){
+	override method valorInmueble(){
 		return (350000 * cantidadAmbientes) + zona.plusPorZona()
 	}
 }
 
-class Local inherits Casa{
-	const property operacion = alquiler // arreglar 
+class Local inherits Casa {
+	var property tipoDeLocal
+	
+	override method operacion(){
+		return alquiler
+	}
+	
+	override method valorInmueble(){
+		return tipoDeLocal.valorInmueble(super())
+	}
 }
+
+object galpon {
+	method valorInmueble(valorInmueble){
+		return valorInmueble /2 
+	}
+}
+
+object localALaCalle {
+	var montoFijo
+	
+	method valorInmueble(valorInmueble){
+		return valorInmueble + montoFijo 
+	}
+}
+
